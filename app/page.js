@@ -4,18 +4,16 @@ import { useState, useEffect } from 'react';
 import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc, getDoc } from 'firebase/firestore'; 
 import { firestore } from '../firebase'; 
 import { Button, TextField, Typography, Box, Container, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add'; 
-import RemoveIcon from '@mui/icons-material/Remove'; 
-import DeleteIcon from '@mui/icons-material/Delete'; 
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Home() {
   const [items, setItems] = useState([]);
   const [newItem, setNewItem] = useState('');
-  
 
-  
-  // Fetch items from Firestore
   useEffect(() => {
+    if (!firestore) return; // Ensure firestore is defined
     const fetchItems = async () => {
       const itemsCollection = collection(firestore, 'Items');
       const itemsSnapshot = await getDocs(itemsCollection);
@@ -25,20 +23,19 @@ export default function Home() {
     fetchItems();
   }, []);
 
-  // Add new item
   const handleAddItem = async () => {
+    if (!firestore) return; // Ensure firestore is defined
     if (newItem.trim() === '') return;
     const itemsCollection = collection(firestore, 'Items');
     await addDoc(itemsCollection, { itemName: newItem, itemQuantity: 0 });
     setNewItem('');
-    // Re-fetch items
     const itemsSnapshot = await getDocs(itemsCollection);
     const itemsList = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     setItems(itemsList);
   };
 
-  // Update item quantity
   const handleUpdateQuantity = async (id, delta) => {
+    if (!firestore) return; // Ensure firestore is defined
     const itemDoc = doc(firestore, 'Items', id);
     const itemSnap = await getDoc(itemDoc);
     const currentQuantity = itemSnap.data().itemQuantity;
@@ -48,17 +45,15 @@ export default function Home() {
       return;
     }
     await updateDoc(itemDoc, { itemQuantity: newQuantity });
-    // Re-fetch items
     const itemsCollection = collection(firestore, 'Items');
     const itemsSnapshot = await getDocs(itemsCollection);
     const itemsList = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     setItems(itemsList);
   };
 
-  // Remove item
   const handleRemoveItem = async (id) => {
+    if (!firestore) return; // Ensure firestore is defined
     await deleteDoc(doc(firestore, 'Items', id));
-    // Re-fetch items
     const itemsCollection = collection(firestore, 'Items');
     const itemsSnapshot = await getDocs(itemsCollection);
     const itemsList = itemsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
