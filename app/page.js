@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc, getDoc } from 'firebase/firestore'; 
 import { firestore } from '../firebase'; 
 import { Button, TextField, Typography, Box, Container, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add'; // Ensure this path is correct
-import RemoveIcon from '@mui/icons-material/Remove'; // Ensure this path is correct
-import DeleteIcon from '@mui/icons-material/Delete'; // Ensure this path is correct
+import AddIcon from '@mui/icons-material/Add'; 
+import RemoveIcon from '@mui/icons-material/Remove'; 
+import DeleteIcon from '@mui/icons-material/Delete'; 
 
 export default function Home() {
   const [items, setItems] = useState([]);
